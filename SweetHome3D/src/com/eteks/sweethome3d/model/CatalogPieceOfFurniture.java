@@ -843,6 +843,9 @@ public class CatalogPieceOfFurniture implements Comparable<CatalogPieceOfFurnitu
     }
     return checkedCriteria == filterCriteriaCollationKeys.length;
   }
+  public float getVolume(){
+    return height * width * depth;
+  }
   
   /**
    * Returns the collation key bytes of each criterion in the given <code>filter</code>.
