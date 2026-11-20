@@ -2008,6 +2008,35 @@ public class PlanComponent extends JComponent implements PlanView, Scrollable, P
    * that makes it fill <code>pageFormat</code> imageable size if this attribute is <code>null</code>.
    */
   public int print(Graphics g, PageFormat pageFormat, int pageIndex) {
+    List<Level> levels = this.home.getLevels();
+    if (levels.isEmpty()) {
+      return printOnePage(g, pageFormat, pageIndex);
+    } else {
+      Level oldSelectedLevel = this.home.getSelectedLevel();
+      // Added since It draws over level 2 otherwise Possibly delete?
+      Graphics subG = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB).getGraphics();
+      int remainingIndex = pageIndex;
+      for (Level level : levels) {
+        if (!level.isViewable()) {
+          continue; // this if was taken from AI, I didn't know we had access to isViewable
+        }
+        this.home.setSelectedLevel(level);
+        int levelPageCount = 0;
+        while (printOnePage(subG, pageFormat, levelPageCount) == PAGE_EXISTS) {
+          levelPageCount++;
+        }
+        if (remainingIndex < levelPageCount) { // this if and remaining index operation used AI, I was unsure how to ensure this check, and whether this operation was necessary.
+          return printOnePage(g, pageFormat, remainingIndex);
+        }
+        remainingIndex -= levelPageCount;
+      }
+      this.home.setSelectedLevel(oldSelectedLevel);
+      return NO_SUCH_PAGE;
+
+}
+    }
+
+  private int printOnePage(Graphics g, PageFormat pageFormat, int pageIndex) {
     List<Selectable> printedItems = getPaintedItems(); 
     Rectangle2D printedItemBounds = getItemsBounds(g, printedItems);
     if (printedItemBounds != null) {

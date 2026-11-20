@@ -132,6 +132,7 @@ public class FurnitureTable extends JTable implements View, Printable {
   private Popup                  furnitureInformationPopup;
   private AWTEventListener       informationPopupRemovalListener;
 
+
   /**
    * Creates a table that displays furniture of <code>home</code>.
    * @param home        the home displayed by this view
@@ -772,13 +773,14 @@ public class FurnitureTable extends JTable implements View, Printable {
             rendererComponent.setForeground(Color.BLACK);
             return rendererComponent;
           }
+
         };
       // Change printable column cell renderer 
       printableColumn.setCellRenderer(printableCellRenderer);
       // Change printable column header renderer
       printableColumn.setHeaderRenderer(printableHeaderRenderer);
       printableColumnModel.addColumn(printableColumn);
-    }    
+    }
     return print(g, pageFormat, pageIndex, printableColumnModel, Color.BLACK);
   }
 
@@ -923,7 +925,6 @@ public class FurnitureTable extends JTable implements View, Printable {
             break;
           case VOLUME:
             writer.write(sizeFormat.format(copiedPiece.getVolume()));
-            break;
           case X : 
             writer.write(sizeFormat.format(copiedPiece.getX()));
             break;
@@ -1359,8 +1360,6 @@ public class FurnitureTable extends JTable implements View, Printable {
                       isSelected, hasFocus, row, column);
             }
           };
-
-
         case X :
           return new SizeRenderer() {
               @Override
